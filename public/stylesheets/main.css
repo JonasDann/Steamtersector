@@ -1,0 +1,205 @@
+body {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    overflow: scroll;
+}
+
+.gameListRow {
+    min-height: 69px;
+    margin-bottom: 4px;
+    background: rgba( 0, 0, 0, 0.2 );
+    padding: 8px;
+    overflow: hidden;
+}
+
+.gameListRowLogo {
+    float: left;
+    max-width: 30%;
+    width: 184px;
+    margin-right: 8px;
+    position: relative;
+}
+
+.gameListRowLogo img {
+    width: 100%;
+    height: auto;
+    max-height: 69px;
+}
+
+.gameListRowItem {
+    font-size: 11px;
+    color: #939393;
+    position: relative;
+    overflow: hidden;
+}
+
+.gameListRowItemName {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: normal;
+    font-family: "Motiva Sans Light", "Motiva Sans", arial, tahoma, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body {
+    background:  #1b2838;
+
+    text-align: left;
+
+    color: #8F98A0;
+    font-size: 14px;
+
+    margin:0;
+    padding:0;
+}
+
+.gray_bevel.for_text_input {
+    display: inline-block;
+    padding-bottom: 1px;
+    height: 25px;
+}
+
+.gray_bevel input {
+    line-height: 21px;
+    height: 21px;
+}
+
+.gray_bevel input {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+    font-size: 13px;
+    color: #C6D4DF;
+}
+
+.gray_bevel {
+    background-color: rgba( 0, 0, 0, 0.2 );
+    border-radius: 3px;
+    border: 1px solid #000;
+    box-shadow: 1px 1px 0 0 rgba( 91, 132, 181, 0.2 );
+    color: #C6D4DF;
+
+    margin-bottom: 6px;
+    outline: none;
+
+    padding: 4px 6px;
+}
+
+.profile_small_header_bg {
+    background-image: url( 'http://steamcommunity-a.akamaihd.net/public/images/profile/profile_header_small_bg.png' );
+    max-width: 1010px;
+    height: 215px;
+    margin: 0 auto -98px auto;
+    background-position: center;
+}
+
+.profile_small_header_texture {
+    background-image: url( 'http://steamcommunity-a.akamaihd.net/public/images/profile/profile_header_small_bg_texture.jpg' );
+    max-width: 978px;
+    height: 102px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.profile_small_header_text {
+    position: absolute;
+    left: 120px;
+    right: 30px;
+    bottom: 35px;
+    max-height: 65px;
+    color: white;
+    font-size: 14px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile_small_header_name {
+    font-size: 26px;
+}
+
+a, .whiteLink {
+    color: #ebebeb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#mainContent {
+    margin: 0 auto;
+    width: 948px;
+    background: none;
+    text-align:left;
+    padding-top:10px;
+}
+
+.header_installsteam_btn_green {
+    background-image: url( '../images/green_button_background.png' );
+    background-size: 100% 100%;
+    color: rgb(229, 228, 220);
+    display: inline-block;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid #002003;
+    box-shadow: 1px 1px 0 0 rgba( 91, 132, 181, 0.2 );
+    padding: 4px 6px 1px 6px;
+    cursor: pointer;
+}
+
+.header_installsteam_btn_green:hover {
+    color: #fff;
+}
+
+#users {
+    float: right;
+}
+
+.user {
+    float: right;
+    background: rgba( 0, 0, 0, 0.2 );
+    margin-left: 5px;
+    width: 125px;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 6px;
+    box-shadow: 1px 1px 0 0 rgba( 91, 132, 181, 0.2 );
+    border-radius: 3px;
+}
+
+.user img {
+    height: 20px;
+    float: left;
+    margin: 6px 6px 6px 0;
+}
+
+.user_name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 79px;
+    margin-right: 4px;
+    white-space: nowrap;
+    float: left;
+}
+
+.user .user_remove {
+    font-size: 16px;
+}
+
+.user_remove:hover {
+    color: #d20000;
+    cursor: pointer;
+}
+
+.clear {
+    clear: both;
+}
+
+form {
+    display: inline-block;
+}

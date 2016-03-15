@@ -1,0 +1,122 @@
+@(title: String)
+
+@main(title) {
+    <div class="profile_small_header_bg">
+        <div class="profile_small_header_texture">
+            <div class="profile_small_header_text">
+                <span class="profile_small_header_name">
+                    <a class="whiteLink">Stintersector</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div id="mainContent">
+        <div>
+            <form>
+                <div class="gray_bevel for_text_input">
+                    <input type="text" id="user_input" placeholder="Enter player name or id">
+                </div>
+                <div id="add_btn" class="header_installsteam_btn_green">
+                    <span class="fa fa-plus"></span>
+                </div>
+            </form>
+            <div id="users"></div>
+            <div class="clear"></div>
+        </div>
+        <div id="games"></div>
+    </div>
+    <script>
+        var users = [];
+        var usersChanged = false;
+
+        function getGames() {
+            if (usersChanged) {
+                $.ajax({
+                    url: "/games?usersteamids=" + encodeURIComponent(users.join(",")),
+                    success: function(data) {
+                        var games = document.querySelector("#games");
+                        var innerHTML = "";
+                        data.forEach(function(elem) {
+                            innerHTML += "<div class=\"gameListRow\">" +
+                                            "<div class=\"gameListRowLogo\">" +
+                                                "<a href=\"http://steamcommunity.com/app/" + elem.appid + "\">" +
+                                                    "<img src=\"http://media.steampowered.com/steamcommunity/public/images/apps/" + elem.appid + "/" + elem.img_logo_url + ".jpg\">" +
+                                                "</a>" +
+                                            "</div>" +
+                                            "<div class=\"gameListRowItem\">" +
+                                                "<div class=\"gameListRowItemName ellipsis \">" + elem.name + "</div>" +
+                                            "</div>" +
+                                          "</div>"
+                        });
+                        games.innerHTML = innerHTML
+                    },
+                    error: function() {
+                        alert("error");
+                    }
+                });
+            }
+        }
+
+        function addUser(userId) {
+            if (users.indexOf(userId) == -1) {
+                users.push(userId);
+                usersChanged = true;
+                var usersDiv = $("#users");
+                $.ajax({
+                    url: "/user?steamid=" +userId,
+                    success: function(data) {
+                        var userDiv  = $("<div id=\"user" + userId + "\" class=\"user\">" +
+                                    "<img src=\"" + data.avatar + "\">" +
+                                    "<div class=\"user_name\">" +
+                                        data.personaname +
+                                    "</div>" +
+                                    "<span class=\"fa fa-times-circle clear user_remove\"></span>" +
+                                "</div>");
+                        userDiv.find(".user_remove").on("click", function() {
+                            userDiv.remove();
+                            users = users.filter(function(value) {
+                                return value != userId;
+                            });
+                            usersChanged = true;
+                            getGames();
+                            history.pushState({users: users}, "@title", "?usersteamids=" + users.join(","));
+                        });
+                        userDiv.appendTo(usersDiv);
+                    },
+                    error: function() {
+                        alert("error");
+                    }
+                });
+            }
+        }
+
+        function submit(event) {
+            event.preventDefault();
+            addUser(document.querySelector("#user_input").value);
+            getGames();
+        }
+        document.querySelector("form").addEventListener("submit", submit);
+        document.querySelector("#add_btn").addEventListener("click", submit);
+
+        window.addEventListener("popstate", function(event) {
+            if (event.state && event.state.users) {
+                users = [];
+                $("#users").html("");
+                event.state.users.forEach(addUser);
+            }
+        });
+
+        $(function() {
+            window.location.search.substr(1).split("&").forEach(function(parameter) {
+                var parameterSplit = parameter.split("=");
+                var key = parameterSplit[0];
+                var value = parameterSplit[1];
+                if (key == "usersteamids") {
+                    value.split(",").forEach(addUser);
+                    history.replaceState({users: users}, "@title", location.href);
+                    getGames();
+                }
+            });
+        });
+    </script>
+}
