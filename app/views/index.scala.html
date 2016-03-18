@@ -51,40 +51,44 @@
                         games.innerHTML = innerHTML
                     },
                     error: function() {
-                        alert("error");
+                        alert("error getGames");
                     }
                 });
             }
         }
 
-        function addUser(userId) {
+        function addUser(userId, complete) {
             if (users.indexOf(userId) == -1) {
-                users.push(userId);
-                usersChanged = true;
                 var usersDiv = $("#users");
                 $.ajax({
-                    url: "/user?steamid=" +userId,
+                    url: "/user?steamid=" + userId,
                     success: function(data) {
-                        var userDiv  = $("<div id=\"user" + userId + "\" class=\"user\">" +
-                                    "<img src=\"" + data.avatar + "\">" +
-                                    "<div class=\"user_name\">" +
-                                        data.personaname +
-                                    "</div>" +
-                                    "<span class=\"fa fa-times-circle clear user_remove\"></span>" +
-                                "</div>");
-                        userDiv.find(".user_remove").on("click", function() {
-                            userDiv.remove();
-                            users = users.filter(function(value) {
-                                return value != userId;
-                            });
+                        if (users.indexOf(data.steamid) == -1) {
+                            users.push(data.steamid);
                             usersChanged = true;
-                            getGames();
-                            history.pushState({users: users}, "@title", "?usersteamids=" + users.join(","));
-                        });
-                        userDiv.appendTo(usersDiv);
+                            var userDiv  = $("<div id=\"user" + data.steamid + "\" class=\"user\">" +
+                                        "<img src=\"" + data.avatar + "\">" +
+                                        "<div class=\"user_name\">" +
+                                            data.personaname +
+                                        "</div>" +
+                                        "<span class=\"fa fa-times-circle clear user_remove\"></span>" +
+                                    "</div>");
+                            userDiv.find(".user_remove").on("click", function() {
+                                userDiv.remove();
+                                users = users.filter(function(value) {
+                                    return value != data.steamid;
+                                });
+                                history.pushState({users: users}, "@title", "?usersteamids=" + users.join(","));
+                                usersChanged = true;
+                                getGames();
+                            });
+                            userDiv.appendTo(usersDiv);
+                        }
+                        complete(null);
                     },
                     error: function() {
-                        alert("error");
+                        alert("error addUser");
+                        complete("error addUser");
                     }
                 });
             }
@@ -92,8 +96,13 @@
 
         function submit(event) {
             event.preventDefault();
-            addUser(document.querySelector("#user_input").value);
-            getGames();
+            addUser(document.querySelector("#user_input").value, function(error) {
+                if (!error) {
+                    $("form input").val("");
+                    history.pushState({users: users}, "@title", "?usersteamids=" + users.join(","));
+                    getGames();
+                }
+            });
         }
         document.querySelector("form").addEventListener("submit", submit);
         document.querySelector("#add_btn").addEventListener("click", submit);
@@ -103,6 +112,7 @@
                 users = [];
                 $("#users").html("");
                 event.state.users.forEach(addUser);
+                getGames();
             }
         });
 
@@ -112,9 +122,17 @@
                 var key = parameterSplit[0];
                 var value = parameterSplit[1];
                 if (key == "usersteamids") {
-                    value.split(",").forEach(addUser);
-                    history.replaceState({users: users}, "@title", location.href);
-                    getGames();
+                    var users = value.split(",");
+                    var count = 0;
+                    users.forEach(function(user) {
+                        addUser(user, function() {
+                            count++;
+                            if (count >= users.length) {
+                                history.replaceState({users: users}, "@title", location.href);
+                                getGames();
+                            }
+                        })
+                    });
                 }
             });
         });
